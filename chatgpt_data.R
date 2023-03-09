@@ -14,7 +14,6 @@ table(chatgpt_subreddit_posts$subreddit)
 length(unique(chatgpt_subreddit_posts$timestamp))
 
 # save
-save(chatgpt_subreddit_posts, file="chatgpt_subreddit0307.RData")
-load("chatgpt_subreddit0307.RData")
+save(chatgpt_subreddit_posts, file="chatgpt_subreddit0308.RData")
+load("chatgpt_subreddit0308.RData")
 getwd()
-kk
