@@ -1,6 +1,6 @@
 library(RedditExtractoR)
 
-<<<<<<< HEAD
+#<<<<<<< HEAD
 bard_urls = find_thread_urls(keywords='bard', period='day')
 
 # loop
@@ -11,10 +11,10 @@ for(subreddit in bard_urls$subreddit[1:25]){
 }
 
 # save
-save(bard_urls, file="bard0307.RData")
-save(bard_subreddit_posts, file="bard_subreddit0307.RData")
+save(bard_urls, file="data/bard0309.RData")
+save(bard_subreddit_posts, file="data/bard_subreddit0309.RData")
 #load("bard_subreddit0306.RData")
-=======
+#=======
 chatgpt_urls = find_thread_urls(keywords='chatgpt', period='day')
 
 # loop
@@ -29,7 +29,9 @@ table(chatgpt_subreddit_posts$subreddit)
 length(unique(chatgpt_subreddit_posts$timestamp))
 
 # save
-save(chatgpt_subreddit_posts, file="chatgpt_subreddit0308.RData")
-load("chatgpt_subreddit0308.RData")
->>>>>>> 57b875f23f047dc699ab713a197cd63bf863ba66
-getwd()
+save(chatgpt_subreddit_posts, file="data/chatgpt_subreddit0309.RData")
+save(chatgpt_urls, file="data/chatgpt0309.RData")
+
+#load("chatgpt_subreddit0308.RData")
+#>>>>>>> 57b875f23f047dc699ab713a197cd63bf863ba66
+#getwd()
