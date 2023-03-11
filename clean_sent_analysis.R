@@ -30,11 +30,8 @@ library(ggplot2)
 library(textmineR)
 library(ggwordcloud)
 
-data = combined_data %>%
-  select(title) %>%
-  rename(full_text=title) %>% 
-  mutate(doc_id=seq(n())) %>%
-  data.frame()
+
+
 
 corpus_sotu_orig <- corpus(data, 
                            docid_field = "doc_id",

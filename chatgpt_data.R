@@ -36,4 +36,9 @@ save(chatgpt_urls, file="data/chatgpt0310.RData")
 load("data/chatgpt_subreddit0310.RData")
 #>>>>>>> 57b875f23f047dc699ab713a197cd63bf863ba66
 #getwd()
+library(dplyr)
 load(paste0("data/",combined_data$X.bard_subreddit_posts.[1],".RData"))
+combined_data2 = combined_data %>% 
+  select(title)
+write.csv(combined_data2,file ="combined_data.csv",
+           fileEncoding = "utf-8")
