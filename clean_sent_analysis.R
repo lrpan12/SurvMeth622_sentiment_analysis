@@ -1,3 +1,32 @@
+load("C:/Users/ccris/Dropbox (University of Michigan)/carlos/Academy/university/GitHub/SurvMeth622_sentiment_analysis/data/combined0310.RData")
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+plot = combined_data %>% 
+  select(title,date_utc) %>% 
+  distinct() %>% 
+  separate(date_utc, 
+           into = c("year", "month", "day"), sep = "-") %>% 
+  group_by(day) %>% 
+  mutate(freq = n()) %>% 
+  distinct(freq,day) %>% 
+  drop_na()
+
+ggplot(plot, aes(x = day, y = freq, fill=day)) +
+  geom_bar(stat = "identity")+
+  labs(x = "Day", 
+       y = "Frequency",
+       title = "Barplot")+
+  geom_text(aes(label = freq), vjust = -0.5)+
+  scale_x_discrete(labels = c( "03/06", "03/07" ,
+                               "03/08","03/09","03/10"))+
+  theme(legend.position = "none")
+  
+
+plot$date_utc = as.Date(plot$date_utc)
+
+
+
 dir_path <- "data/"
 
 # get the list of files in the directory
