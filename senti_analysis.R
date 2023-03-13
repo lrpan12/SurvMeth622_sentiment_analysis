@@ -12,23 +12,17 @@ library(syuzhet)
 library(httpuv)
 # Emotions for each tweet using NRC dictionary
 load("data/combined0310.RData")
-sample = combined_data %>% 
-  select(title) %>% 
-  sample(50)
-emotions <- get_nrc_sentiment(combined_data$title)
-emo_bar = colSums(emotions)
-emo_sum = data.frame(count=emo_bar, emotion=names(emo_bar))
-emo_sum$emotion = factor(emo_sum$emotion, levels=emo_sum$emotion[order(emo_sum$count, decreasing = TRUE)])
-
 ######
 
 tweets.df = combined_data %>%
   select(title) %>% 
-  rename(text= title) 
-tweets.df = tweets.df[c(1:100),]
-tweets.df = tweets.df %>% 
-  data.frame()
-tweets.df$text = tweets.df$.
+  rename(text= title) %>% 
+  distinct()
+
+# tweets.df = tweets.df %>% 
+#   data.frame()
+# tweets.df$text
+#tweets.df$text = tweets.df$.
 
 tweets.df$text=gsub("&amp", "", tweets.df$text)
 tweets.df$text = gsub("&amp", "", tweets.df$text)
@@ -86,6 +80,7 @@ dtm_d <- data.frame(word = names(dtm_v),freq=dtm_v)
 # Display the top 20 most frequent words
 head(dtm_d, 20)
 # Plot the most frequent words
+par(mfrow=c(1,1))
 barplot(dtm_d[2:20,]$freq, las = 2, names.arg = dtm_d[2:20,]$word,
         col ="lightblue", main ="Top frequent words",
         ylab = "Word frequencies")
