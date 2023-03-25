@@ -49,14 +49,19 @@ tweets.df$text <- removeWords(tweets.df$text, stopwords("english"))
 tweets.df$title <- removeWords(tweets.df$title, stopwords("spanish"))
 tweets.df$text <- removeWords(tweets.df$text, stopwords("spanish"))
 
+# remove NA in text
+tweets.df <- tweets.df[complete.cases(tweets.df$text), ]
+
+tweets.df <- tweets.df[nzchar(tweets.df$text), ]
+
 # split the dataset 
 sample = tweets.df %>%
-  filter(!is.na(text)) %>% 
+  #filter(!is.na(text)) %>% 
   sample_n(200)
 
 sampleNia = sample[1:66,]
-sampleCarlos = sample[67:123,]
-sampleLR = sample[124:190,]
+sampleCarlos = sample[67:133,]
+sampleLR = sample[134:200,]
 
 write.csv(sampleNia,file="Nia.csv")
 write.csv(sampleCarlos,file="Carlos.csv")
