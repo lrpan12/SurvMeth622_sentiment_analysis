@@ -17,8 +17,8 @@ This notebook gives a simple example of using supervised machine learning to aut
 # If you have not installed these, make sure to install first!
 
 # Tidyverse and text analysis tools
-#library(tidyverse)
-library(tidyr)
+library(tidyverse)
+#library(tidyr)
 library(tidytext)
 
 # For decision trees

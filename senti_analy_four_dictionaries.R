@@ -49,6 +49,18 @@ tweets.df$text <- removeWords(tweets.df$text, stopwords("english"))
 tweets.df$title <- removeWords(tweets.df$title, stopwords("spanish"))
 tweets.df$text <- removeWords(tweets.df$text, stopwords("spanish"))
 
+# split the dataset 
+sample = tweets.df %>%
+  filter(!is.na(text)) %>% 
+  sample_n(200)
+
+sampleNia = sample[1:66,]
+sampleCarlos = sample[67:123,]
+sampleLR = sample[124:190,]
+
+write.csv(sampleNia,file="Nia.csv")
+write.csv(sampleCarlos,file="Carlos.csv")
+write.csv(sampleLR,file="LongRong.csv")
 
 cats_urls = tweets.df
 cats_urls$datetime = as_datetime(cats_urls$timestamp)
