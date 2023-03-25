@@ -16,7 +16,7 @@ load("C:/Users/ccris/Dropbox (University of Michigan)/carlos/Academy/university/
 ######
 
 tweets.df = combined_data %>%
-  select(title) %>% 
+  select(title,timestamp,date_utc) %>% 
   rename(text= title) %>% 
   distinct()
 
@@ -38,6 +38,39 @@ tweets.df$text = gsub("^\\s+|\\s+$", "", tweets.df$text)
 tweets.df$text <- iconv(tweets.df$text, "UTF-8", "ASCII", sub="")
 
 emotions <- get_nrc_sentiment(tweets.df$text)
+library(tidyr)
+
+merge = tweets.df %>% 
+  mutate(ID=seq(10718)) %>% 
+  left_join(emotions %>% 
+              select(negative,positive) %>% 
+              mutate(ID=seq(10718))) %>% 
+  filter(positive>2 | negative>2 ) %>% 
+  mutate(sum= positive+negative)
+  
+  
+positive = merge %>% 
+  filter(negative==0) %>% 
+  mutate(Sent = "Positive") %>% 
+select(-c(negative,positive,sum))
+
+negative = merge %>% 
+  filter(positive<2) %>% 
+  mutate(Sent = "Negative")  %>% 
+  select(-c(negative,positive,sum))
+
+
+sample = rbind(positive,negative)
+
+#write.csv(sample,file = "sample.csv")
+
+sample_n(400)
+table(merge$negative)
+
+table(merge$positive)
+
+
+
 emo_bar = colSums(emotions)
 emo_sum = data.frame(count=emo_bar, emotion=names(emo_bar))
 emo_sum$emotion = factor(emo_sum$emotion, levels=emo_sum$emotion[order(emo_sum$count, decreasing = TRUE)])
