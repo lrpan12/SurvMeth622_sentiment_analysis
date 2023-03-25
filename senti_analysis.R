@@ -12,6 +12,7 @@ library(syuzhet)
 library(httpuv)
 # Emotions for each tweet using NRC dictionary
 load("data/combined0310.RData")
+load("C:/Users/ccris/Dropbox (University of Michigan)/carlos/Academy/university/GitHub/SurvMeth622_sentiment_analysis/data/combined0310.RData")
 ######
 
 tweets.df = combined_data %>%

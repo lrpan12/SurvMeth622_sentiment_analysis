@@ -2,6 +2,14 @@ load("C:/Users/ccris/Dropbox (University of Michigan)/carlos/Academy/university/
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+combined_data = combined_data %>% 
+  group_by(date_utc) %>% 
+  mutate(value = n())
+combined_data$date_utc = as.Date(combined_data$date_utc)
+
+ggplot(combined_data, aes(x = date_utc, y = value)) +
+  geom_bar(stat = "identity") 
+
 plot = combined_data %>% 
   select(title,date_utc) %>% 
   distinct() %>% 
@@ -16,8 +24,8 @@ ggplot(plot, aes(x = day, y = freq, fill=day)) +
   geom_bar(stat = "identity")+
   labs(x = "Day", 
        y = "Frequency",
-       title = "Barplot")+
-  geom_text(aes(label = freq), vjust = -0.5)+
+       title = "")+
+  geom_text(aes(label = freq), vjust = 0.9)+
   scale_x_discrete(labels = c( "03/06", "03/07" ,
                                "03/08","03/09","03/10"))+
   theme(legend.position = "none")
