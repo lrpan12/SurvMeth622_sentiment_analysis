@@ -1,10 +1,10 @@
 ---
 title: "Machine Learning for Automated Coding"
 output:
+  pdf_document: default
+  html_notebook: default
   html_document:
     df_print: paged
-  html_notebook: default
-  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -40,7 +40,13 @@ We scraped the data from PatentsView, then created labels of whether or not the 
 > The labels here were generated using Latent Dirichlet Allocation, a form of unsupervised learning, to assign topics based on abstracts, so that I could easily assign a label to each one. In your assignments, you'll be using hand-coded sentiments as the labels in the data that you work with.
 
 ```{r}
-umd_abstracts <- read.csv('umd_patents.csv', stringsAsFactors = FALSE)
+
+
+umd_abstracts <- read.csv('C:/Users/32636/Desktop/2023Winter_UM/Surv622/ass2_Using the Reddit API and Sentiment Analysis of Reddit Posts/SurvMeth622_sentiment_analysis/sample2.csv') %>% 
+rename(patent_abstract=text,
+       label=Sent) %>% 
+  mutate(label=ifelse(label=='Positive','True','False'))
+  
 umd_abstracts$ID <- as.character(umd_abstracts$ID) # Need to make this character for later joins
 glimpse(umd_abstracts)
 ```
@@ -138,7 +144,7 @@ word_list <- umd_abstracts %>%
   unnest_tokens(word, 'patent_abstract') %>% 
   anti_join(stop_words)%>% 
   count(word, sort = TRUE) %>%
-  filter(n >= 10)%>%
+  filter(n >= 5)%>%
   pull(word)
 ```
 
@@ -160,7 +166,7 @@ Now, we need to join this back with our original dataset, using ID, to get the l
 ```{r}
 full_data <- umd_abstracts %>% 
   right_join(patent_features, by = 'ID') %>% 
-  select(-patent_title, -patent_year,-patent_abstract) # Remove extra variables
+  select(-X,-timestamp, -date_utc,-patent_abstract) # Remove extra variables
 ```
 
 The full data contains the ID variable (which we will use to make our train/test split in the next section), as well as our features (each word) and the label (True/False for whether the topic was on cell biology or not)
@@ -200,7 +206,7 @@ train_label <- train$label
 test_label <- test$label
 
 # Predicted values from K-NN, with K = 11
-knnpred <- knn(train_features,test_features,train_label, k = 11)
+knnpred <- knn(train_features,test_features,train_label, k = 7)
 ```
 
 The `knnpred` object has the predicted values for each of the `test_features` that we gave it. Let's take a look at what the predicted values are. We'll put the predicted values in a data frame with the actual values.
@@ -228,7 +234,7 @@ With the training and testing datasets that we've created, running the actual tr
 treemod <- rpart(label ~ ., 
                  data = train, 
                  method = 'class', 
-                 control = rpart.control(minsplit = 25))
+                 control = rpart.control(minsplit = 15))
 ```
 
 Let's break down each of the arguments in this function. First, we specify the model, putting the label that we want to predict on the left side of the "~" and all the features we want to include on the right. We include arguments for the dataframe from which we're taking the data, and the tree method we want to use (in this case, since we are doing a classification tree, we use 'class'). Then, we can use the `control` argument to set decision tree parameters. In this case, we are setting the minimum number of observations needed in a node to add a split.
@@ -241,6 +247,7 @@ We have stored the model in the `treemod` object. Let's look at what the model g
 
 # The fancy tree visualization
 fancyRpartPlot(treemod, sub = "")
+
 ```
 
 ### Evaluating the Model
@@ -377,8 +384,8 @@ As you can see, we created a list of 10 vectors, each containing a fold. So, to 
 
 ```{r}
 # Create train and test using fold 1 as test
-patent_test01 <- full_data[flds$Fold01,]
-patent_train01 <- full_data[-flds$Fold01,]
+patent_test01 <- full_data[flds$Fold1,]
+patent_train01 <- full_data[-flds$Fold1,]
 ```
 
 You can then use these train and test sets as we have above. You should put this into a loop, and store the value of metrics such as accuracy, precision, and recall, similar to what we've done in the loop of trying out different parameters.
